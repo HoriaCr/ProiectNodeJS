@@ -64,3 +64,27 @@ exports.delete = function(req, res) {
         }
     });
 };
+
+/**
+ * Problem middleware
+ */
+exports.problemByID = function (req, res, next, id) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            message: 'Problem is invalid'
+        });
+    }
+
+    Problem.findById(id).populate('user', 'displayName').exec(function (err, article) {
+        if (err) {
+            return next(err);
+        } else if (!problem) {
+            return res.status(404).send({
+                message: 'No problem with that identifier has been found'
+            });
+        }
+        req.problem = problem;
+        next();
+    });
+};

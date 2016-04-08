@@ -3,8 +3,8 @@
 /**
  * Module dependencies
  */
-var problemsPolicy = require('../policies/problems.server.policy'),
-    problems = require('../controllers/problems.server.controller');
+var problemsPolicy = require('../policies/judge.server.policy'),
+    problems = require('../controllers/judge.server.controller');
 
 module.exports = function (app) {
     // Problems collection routes
@@ -21,5 +21,6 @@ module.exports = function (app) {
         .get(problems.read)
         .delete(problems.delete);
     // Finish by binding the problem middleware
-    app.param('problemId', problems.problemById);
+    app.param('problemId', problems.problemByID);
+
 };
