@@ -1,0 +1,25 @@
+<section>
+    <div class="page-header">
+        <h1 ng-bind="vm.problem.title"></h1>
+    </div>
+
+    <small>
+        <em class="text-muted">
+            Posted on
+            <span ng-bind="vm.problem.created | date:'mediumDate'"></span>
+            by
+            <span ng-if="vm.problem.user" ng-bind="vm.problem.user.displayName"></span>
+            <span ng-if="!vm.problem.user">Deleted User</span>
+        </em>
+    </small>
+    <p class="lead" ng-bind="vm.problem.content"></p>
+    <h5>Input</h5>
+    <p class="list-group-item-text" ng-bind="vm.problem.input"></p>
+    <h5>Output</h5>
+    <p class="list-group-item-text" ng-bind="vm.problem.output"></p>
+    <a ng-repeat="example in vm.problem.examples">
+        <p ng-bind="example.input"></p>
+        <p ng-bind="example.output"></p>
+
+    </a>
+</section>
