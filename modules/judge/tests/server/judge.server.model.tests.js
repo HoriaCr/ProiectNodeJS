@@ -6,17 +6,17 @@
 var should = require('should'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Article = mongoose.model('Article');
+  Problem = mongoose.model('Problem');
 
 /**
  * Globals
  */
-var user, article;
+var user, problem;
 
 /**
  * Unit tests
  */
-describe('Article Model Unit Tests:', function () {
+describe('Problem Model Unit Tests:', function () {
 
   beforeEach(function (done) {
     user = new User({
@@ -29,9 +29,12 @@ describe('Article Model Unit Tests:', function () {
     });
 
     user.save(function () {
-      article = new Article({
-        title: 'Article Title',
-        content: 'Article Content',
+      problem = new Problem({
+        title: 'Suma',
+        content: 'Suma a doua numere',
+        input: 'a b',
+        output: 's',
+        examples: [{input: '1 2', 'output': '3'}],
         user: user
       });
 
@@ -42,16 +45,16 @@ describe('Article Model Unit Tests:', function () {
   describe('Method Save', function () {
     it('should be able to save without problems', function (done) {
       this.timeout(10000);
-      return article.save(function (err) {
+      return problem.save(function (err) {
         should.not.exist(err);
         done();
       });
     });
 
     it('should be able to show an error when try to save without title', function (done) {
-      article.title = '';
+      problem.title = '';
 
-      return article.save(function (err) {
+      return problem.save(function (err) {
         should.exist(err);
         done();
       });
@@ -59,7 +62,7 @@ describe('Article Model Unit Tests:', function () {
   });
 
   afterEach(function (done) {
-    Article.remove().exec(function () {
+    Problem.remove().exec(function () {
       User.remove().exec(done);
     });
   });

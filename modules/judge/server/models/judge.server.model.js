@@ -35,24 +35,22 @@ var ProblemSchema = new Schema({
         type: String,
         default: '',
         trim: true,
-        required: 'Content cannot be blank'
+        required: 'Input cannot be blank'
     },
     output: {
         type: String,
         default: '',
         trim: true,
-        required: 'Content cannot be blank'
+        required: 'Output cannot be blank'
     },
     examples: [{
         output : {
             type: String,
-            trim: true,
-            required: 'Content cannot be blank'
+            trim: true
         },
         input : {
             type: String,
-            trim: true,
-            required: 'Content cannot be blank'
+            trim: true
         }}]
 });
 

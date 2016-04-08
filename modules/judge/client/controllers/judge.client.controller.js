@@ -31,11 +31,14 @@
 
         // Save Problem
         function save(isValid) {
+            console.log('save problem' + isValid + vm.form.problemForm);
+
             if (!isValid) {
                 $scope.$broadcast('show-errors-check-validity', 'vm.form.problemForm');
                 return false;
             }
 
+            console.log('wtf');
             // TODO: move create/update logic to service
             if (vm.problem._id) {
                 vm.problem.$update(successCallback, errorCallback);

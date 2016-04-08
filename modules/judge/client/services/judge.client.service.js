@@ -8,7 +8,7 @@
   JudgeService.$inject = ['$resource'];
 
   function JudgeService($resource) {
-    return $resource('api/problems/:articleId', {
+    return $resource('api/problems/:problemId', {
       problemId: '@_id'
     }, {
       update: {
