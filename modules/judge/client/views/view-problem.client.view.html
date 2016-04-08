@@ -2,7 +2,14 @@
     <div class="page-header">
         <h1 ng-bind="vm.problem.title"></h1>
     </div>
-
+    <div class="pull-right" ng-show="vm.problem.isCurrentUserOwner">
+      <a class="btn btn-primary" ui-sref="problems.edit({ problemId: vm.problem._id })">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="vm.remove()">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
     <small>
         <em class="text-muted">
             Posted on
@@ -17,9 +24,13 @@
     <p class="list-group-item-text" ng-bind="vm.problem.input"></p>
     <h5>Output</h5>
     <p class="list-group-item-text" ng-bind="vm.problem.output"></p>
-    <a ng-repeat="example in vm.problem.examples">
-        <p ng-bind="example.input"></p>
-        <p ng-bind="example.output"></p>
+    <ul>
+      <li ng-repeat="example in vm.problem.examples">
+          input
+          <p ng-bind="example.input"></p>
+          output
+          <p ng-bind="example.output"></p>
 
-    </a>
+      </li>
+    </ul>
 </section>

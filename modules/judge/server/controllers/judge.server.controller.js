@@ -17,7 +17,6 @@ var path = require('path'),
 exports.create = function (req, res) {
     var problem = new Problem(req.body);
     problem.user = req.user;
-    console.log(problem);
     problem.save(function (err) {
         if (err) {
             return res.status(400).send({
@@ -33,6 +32,8 @@ exports.create = function (req, res) {
 exports.read = function (req, res) {
     // convert mongoose document to JSON
     var problem = req.problem ? req.problem.toJSON() : {};
+    problem.isCurrentUserOwner = req.user && problem.user && problem.user._id.toString() === req.user._id.toString() ? true : false;
+
     res.json(problem);
 };
 
@@ -50,6 +51,28 @@ exports.list = function (req, res) {
             }
 
         });
+};
+
+/**
+ * Update an article
+ */
+exports.update = function (req, res) {
+    var problem = req.problem;
+
+    problem.title = req.body.title;
+    problem.content = req.body.content;
+    problem.input = req.body.input;
+    problem.output = req.body.output
+    problem.example = req.body.example;
+    problem.save(function (err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.json(problem);
+        }
+    });
 };
 
 exports.delete = function(req, res) {
@@ -76,7 +99,7 @@ exports.problemByID = function (req, res, next, id) {
         });
     }
 
-    Problem.findById(id).populate('user', 'displayName').exec(function (err, article) {
+    Problem.findById(id).populate('user', 'displayName').exec(function (err, problem) {
         if (err) {
             return next(err);
         } else if (!problem) {

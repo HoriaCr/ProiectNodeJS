@@ -15,6 +15,7 @@ module.exports = function (app) {
     // Single problem routes
     app.route('/api/problems/:problemId').all(problemsPolicy.isAllowed)
         .get(problems.read)
+        .put(problems.update)
         .delete(problems.delete);
 
     app.route('/api/problems/clone:problemId').all(problemsPolicy.isAllowed)
