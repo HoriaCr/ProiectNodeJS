@@ -65,7 +65,8 @@ exports.update = function (req, res) {
     problem.content = req.body.content;
     problem.input = req.body.input;
     problem.output = req.body.output;
-    problem.example = req.body.example;
+    problem.examples = req.body.examples;
+    problem.tests = req.body.tests;
     problem.save(function (err) {
         if (err) {
             return res.status(400).send({

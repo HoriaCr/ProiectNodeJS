@@ -37,7 +37,7 @@
 
         // Save Problem
         function save(isValid) {
-            console.log('this is bad' + isValid);
+
             if (!isValid) {
                 $scope.$broadcast('show-errors-check-validity', 'vm.form.problemForm');
                 return false;
@@ -63,12 +63,10 @@
 
         // Add new example input
         function addExample() {
-            console.log('Should add example');
             vm.problem.examples.push({
                 input: "",
                 output: ""
             });
-            console.log('Should be here');
         }
 
         // Remove one example input
