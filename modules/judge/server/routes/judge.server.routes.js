@@ -21,7 +21,19 @@ module.exports = function (app) {
     app.route('/api/problems/clone:problemId').all(problemsPolicy.isAllowed)
         .get(problems.read)
         .delete(problems.delete);
+
+    // Problem submission routes.
+    app.route('/api/problems/submissions/:problemId').all(problemsPolicy.isAllowed)
+        .get(problems.listProblemSubmissions)
+        .post(problems.addSubmission);
+
+
+    app.route('/api/problems/submissions:problemId/:submissionId').all(problemsPolicy.isAllowed)
+        .get(problems.readSubmission);
+
+
     // Finish by binding the problem middleware
     app.param('problemId', problems.problemByID);
 
+    app.param('submissionId', problems.submissionByID);
 };

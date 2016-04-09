@@ -20,7 +20,14 @@ exports.invokeRolesPolicies = function () {
         }, {
             resources: '/api/problems/:problemId',
             permissions: '*'
-        }]
+        }, {
+            resources: '/api/problems/submissions/:problemId',
+            permissions: '*'
+        }, {
+            resources: '/api/problems//submissions/:problemId/:submissionId',
+            permissions: '*'
+        }
+        ]
     }, {
         roles: ['user'],
         allows: [{
@@ -29,7 +36,14 @@ exports.invokeRolesPolicies = function () {
         }, {
             resources: '/api/problems/:problemId',
             permissions: ['get']
-        }]
+        }, {
+            resources: '/api/problems/submissions/:problemId',
+            permissions: '*'
+        }, {
+            resources: '/api/problems/submissions/:problemId/:submissionId',
+            permissions: '*'
+        }
+        ]
     }, {
         roles: ['guest'],
         allows: [{
@@ -37,6 +51,9 @@ exports.invokeRolesPolicies = function () {
             permissions: ['get']
         }, {
             resources: '/api/problems/:problemId',
+            permissions: ['get']
+        }, {
+            resources: '/api/problems/submissions/:problemId',
             permissions: ['get']
         }]
     }]);

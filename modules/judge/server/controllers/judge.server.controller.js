@@ -4,8 +4,10 @@
  * Module dependencies
  */
 var path = require('path'),
+    problemEval = require('../judge.eval'),
     mongoose = require('mongoose'),
     Problem = mongoose.model('Problem'),
+    Submission = mongoose.model('Submission'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 
@@ -13,10 +15,10 @@ var path = require('path'),
  *  Create a problem
  */
 
-
 exports.create = function (req, res) {
     var problem = new Problem(req.body);
     problem.user = req.user;
+    problem.submissions = [];
     problem.save(function (err) {
         if (err) {
             return res.status(400).send({
@@ -54,7 +56,7 @@ exports.list = function (req, res) {
 };
 
 /**
- * Update an article
+ * Update a problem.
  */
 exports.update = function (req, res) {
     var problem = req.problem;
@@ -62,7 +64,7 @@ exports.update = function (req, res) {
     problem.title = req.body.title;
     problem.content = req.body.content;
     problem.input = req.body.input;
-    problem.output = req.body.output
+    problem.output = req.body.output;
     problem.example = req.body.example;
     problem.save(function (err) {
         if (err) {
@@ -88,6 +90,7 @@ exports.delete = function(req, res) {
     });
 };
 
+
 /**
  * Problem middleware
  */
@@ -111,3 +114,68 @@ exports.problemByID = function (req, res, next, id) {
         next();
     });
 };
+
+
+/*
+* List problem submissions.
+*/
+
+exports.listProblemSubmissions = function(req, res) {
+    var problem = req.problem;
+    res.json(problem.submissions.reverse());
+};
+
+exports.addSubmission = function(req, res) {
+    var problem = req.problem;
+    var user = req.user;
+    var submission = new Submission(req.body);
+    var ans = problemEval.evaluateProblem(problem, submission);
+    if (ans[0] !== 'Compilation error') {
+        submission.results = ans[1];
+    }
+    submission.evaluationStatus = ans[0];
+    submission.user = user;
+    submission.save(function (err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.json(submission);
+        }
+    });
+    problem.submissions.append(submission);
+};
+
+exports.readSubmission = function(req, res) {
+    // convert mongoose document to JSON
+    var submission = req.submission ? req.submission.toJSON() : {};
+
+    res.json(submission);
+};
+
+
+/**
+ * Problem middleware
+ */
+exports.submissionByID = function (req, res, next, id) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            message: 'Submission is invalid'
+        });
+    }
+
+    Problem.findById(id).populate('user').exec(function (err, submission) {
+        if (err) {
+            return next(err);
+        } else if (!submission) {
+            return res.status(404).send({
+                message: 'No submission with that identifier has been found'
+            });
+        }
+        req.submission = submission;
+        next();
+    });
+};
+

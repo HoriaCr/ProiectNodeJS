@@ -63,7 +63,8 @@ var ProblemSchema = new Schema({
         input : {
             type: String,
             trim: true
-        }}],
+        }}
+    ],
     tests: [{
         output : {
             type: String,
@@ -72,7 +73,12 @@ var ProblemSchema = new Schema({
         input : {
             type: String,
             trim: true
-        }}]
+        }}
+    ],
+    submissions: [{
+        type: Schema.ObjectId,
+        ref: 'Submission'
+    }]
 });
 
 var SubmissionSchema = new Schema({
