@@ -24,13 +24,14 @@
     <p class="list-group-item-text" ng-bind="vm.problem.input"></p>
     <h5>Output</h5>
     <p class="list-group-item-text" ng-bind="vm.problem.output"></p>
-    <ul>
-      <li ng-repeat="example in vm.problem.examples">
-          input
-          <p ng-bind="example.input"></p>
-          output
-          <p ng-bind="example.output"></p>
+    <hr>
+    <ul class="list-group">
+      <div ng-repeat="example in vm.problem.examples">
+          <strong>input</strong>
+          <li ng-bind="example.input"  class="list-group-item"></li>
+          <strong>output</strong>
+          <li ng-bind="example.output"  class="list-group-item"></li>
 
-      </li>
+      </div>
     </ul>
 </section>

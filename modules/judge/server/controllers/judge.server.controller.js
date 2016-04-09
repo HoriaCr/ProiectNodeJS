@@ -132,6 +132,8 @@ exports.addSubmission = function(req, res) {
     var ans = problemEval.evaluateProblem(problem, submission);
     if (ans[0] !== 'Compilation error') {
         submission.results = ans[1];
+    } else {
+        submission.results = [];
     }
     submission.evaluationStatus = ans[0];
     submission.user = user;

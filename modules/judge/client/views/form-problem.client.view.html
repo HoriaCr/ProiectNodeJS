@@ -33,18 +33,33 @@
                             <textarea name="input" data-ng-model="example.input" id="exampleInput" class="form-control" cols="30" rows="2" placeholder="Input"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="content">Ouput</label>
+                            <label class="control-label" for="content">Output</label>
                             <textarea name="output" data-ng-model="example.output" id="exampleOutput" class="form-control" cols="30" rows="2" placeholder="Output"></textarea>
                         </div>
                     </li>
                 </ul>
-                <button ng-click="vm.addExample()" >Add example</button>
-                <button ng-click="vm.removeExample()">Remove example</button>
-
-                <div class="form-group">
-                    <label class="control-label" for="publishAfter">Publish after</label>
-                    <input name="publishAfter" type="number" ng-model="vm.problem.publishAfter" id="publishAfter"
-                           class="form-control" placeholder="0" required>
+              <div>
+                <input type="button" value="Add example" ng-click="vm.addExample()" class="btn btn-success">
+                <input type="button" value="Remove example" ng-click="vm.removeExample()" class="btn btn-danger">
+              </div>
+              <br/>
+                Tests
+                <ul>
+                  <li ng-repeat="example in vm.problem.tests">
+                    Test # {{$index}}:
+                    <div class="form-group">
+                      <label class="control-label" for="content">Input</label>
+                      <textarea name="input" data-ng-model="test.input" id="testInput" class="form-control" cols="30" rows="2" placeholder="Input"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label" for="content">Ouput</label>
+                      <textarea name="output" data-ng-model="test.output" id="testOutput" class="form-control" cols="30" rows="2" placeholder="Output"></textarea>
+                    </div>
+                  </li>
+                </ul>
+                <div>
+                  <input type="button" value="Add test" ng-click="vm.addTest()" class="btn btn-success">
+                  <input type="button" value="Remove test" ng-click="vm.removeTest()" class="btn btn-danger">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-default">{{vm.problem._id ? 'Update' : 'Create'}}</button>
