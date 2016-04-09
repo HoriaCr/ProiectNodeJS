@@ -4,7 +4,7 @@ var cp = require('child_process');
 
 var runTest = function(interpreter, filename, options, expected) {
     // start time
-    var t1 = process.hrtime()[1];
+    var start = process.hrtime();
     var child = cp.spawnSync(interpreter, [filename], options); 
     if (child.stderr !== '') {
         return ['Compilation error', child.stderr];
@@ -12,9 +12,14 @@ var runTest = function(interpreter, filename, options, expected) {
     
     // ignore trailing newlines when comparing result
     var output = child.stdout.replace(/\n$/, "");
+    
+    var deltaMs = process.hrtime(start)[1] / 1000000; 
     // time it takes for execution
-    var deltaMs = (process.hrtime()[1] - t1) / 1000000;
-    var success = ["Wrong answer", "Accepted"];
+    
+    var success = ['Wrong answer', 'Accepted', 'Time limit exceeded'];
+    if (deltaMs > child.options.timeout) {
+        return [success[2], child.options.timeout];
+    }
     return [success[output === expected ? 1 : 0], deltaMs];
 };
 
@@ -69,7 +74,9 @@ var evalProblem = function(submission, problem) {
 
 var timeLimit = 100;
 var data = 'a = [int(x) for x in input().split()]\n' +
-           'print (a[0] + a[1])';
+           'x = 0\n' +
+           'while 1:\n' +
+           '    x = x + 1';
 
 var submission = {
     'language': 'python3',
@@ -99,4 +106,4 @@ var problem = {
     ]
 };
 
-//console.log(evalProblem(submission, problem));
+console.log(evalProblem(submission, problem));
