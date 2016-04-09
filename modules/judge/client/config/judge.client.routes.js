@@ -60,7 +60,16 @@
         data:{
           pageTitle: 'Problem {{ problemResolve.title }}'
         }
-      });
+      })
+      .state('submissions',{
+        url: '/submissions',
+        templateUrl: 'modules/judge/client/views/list-submissions.client.view.html',
+        controller: 'JudgeSubmissionListController',
+        controllerAs: 'vm',
+        data:{
+          pageTitle: 'Submissions'
+        }
+    });
   }
 
   getProblem.$inject = ['$stateParams', 'JudgeService'];

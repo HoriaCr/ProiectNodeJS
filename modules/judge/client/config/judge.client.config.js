@@ -15,6 +15,12 @@
       roles: ['*']
     });
 
+    Menus.addMenuItem('topbar', {
+      title: 'Submissions',
+      state: 'submissions'
+    });
+
+
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'problems', {
       title: 'List Problems',

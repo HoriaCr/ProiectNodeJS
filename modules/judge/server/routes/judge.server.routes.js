@@ -31,6 +31,10 @@ module.exports = function (app) {
     app.route('/api/problems/submissions:problemId/:submissionId').all(problemsPolicy.isAllowed)
         .get(problems.readSubmission);
 
+    // List all submissions
+    // TODO: This should be probably moved somewhere else.
+    app.route('/api/submissions').all(problemsPolicy.isAllowed)
+        .get(problems.allSubmissions);
 
     // Finish by binding the problem middleware
     app.param('problemId', problems.problemByID);

@@ -1,0 +1,20 @@
+<section>
+  <div class="page-header">
+    <h1>Submissions</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="submission in vm.submissions" ui-sref="problems.view({ problemId: submission.problemId })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="submssion.submitted | date:'mediumDate'"></span>
+        by
+        <span ng-if="submission.user" ng-bind="submission.user.displayName"></span>
+        <span ng-if="!submission.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="submission.title"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.submit.$resolved && !vm.submissions.length">
+    No submissions yet!</a>?
+  </div>
+</section>
