@@ -123,13 +123,24 @@ exports.problemByID = function (req, res, next, id) {
 
 exports.listProblemSubmissions = function(req, res) {
     var problem = req.problem;
-    res.json(problem.submissions.reverse());
+    Submission.find({'problem': problem}).select('-submitted').populate('user problem').exec(
+        function(err, submissions) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.json(submissions);
+            }
+        }
+    );
 };
 
 exports.addSubmission = function(req, res) {
     var problem = req.problem;
     var user = req.user;
     var submission = new Submission(req.body);
+    submission.problem = problem;
     submission.submission = req.body.submission;
     submission.language = req.body.language;
     submission.user = user;
@@ -152,7 +163,6 @@ exports.addSubmission = function(req, res) {
 exports.readSubmission = function(req, res) {
     // convert mongoose document to JSON
     var submission = req.submission ? req.submission.toJSON() : {};
-
     res.json(submission);
 };
 
@@ -182,28 +192,16 @@ exports.submissionByID = function (req, res, next, id) {
 };
 
 exports.allSubmissions = function(req, res) {
-    Problem.find().select(
-        'title submissions').populate('user').exec(
-        function(err, problems) {
+    Submission.find().select('-submitted').populate('user problem').exec(
+        function(err, submissions) {
             if (err) {
                 return res.status(400).send({
                     message: errorHandler.getErrorMessage(err)
                 });
             } else {
-                // Map problem id to each submission and aggregate all
-                var ans = problems.map(function(problem) {
-                    problem.submissions = problem.submissions.map(function(s){
-                        s._problemId = problem._id;
-                        s.title = problem.title;
-                        return s;
-                    });
-                    return problem;
-                }).reduce( function(total, problem) {
-                    return total.concat( problem.submissions );
-                }, []);
-                res.json(ans);
-
+                res.json(submissions);
             }
         }
     );
+
 };

@@ -74,11 +74,7 @@ var ProblemSchema = new Schema({
             type: String,
             trim: true
         }}
-    ],
-    submissions: [{
-        type: Schema.ObjectId,
-        ref: 'Submission'
-    }]
+    ]
 });
 
 var SubmissionSchema = new Schema({
@@ -117,6 +113,10 @@ var SubmissionSchema = new Schema({
         type: String,
         trim: true,
         default: 'pending'
+    },
+    problem: {
+        type: Schema.ObjectId,
+        ref: 'Problem'
     }
 });
 

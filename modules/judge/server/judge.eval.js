@@ -1,13 +1,19 @@
 var crypto = require('crypto');
 var fs = require('fs');
 var cp = require('child_process');
+var path = require('path');
 
-var runTest = function(interpreter, filename, options, expected) {
+
+var runTest = function(interpreter, filename, options, expected, test) {
     // start time
     var start = process.hrtime();
     var child = cp.spawnSync(interpreter, [filename], options); 
     if (child.stderr !== '') {
-        return ['Compilation error', child.stderr];
+        return {
+            'status': 'Compilation error: ' + child.stderr,
+            'executionTime': 0,
+            'test': 0
+        };
     }
     
     // ignore trailing newlines when comparing result
@@ -18,9 +24,17 @@ var runTest = function(interpreter, filename, options, expected) {
     
     var success = ['Wrong answer', 'Accepted', 'Time limit exceeded'];
     if (deltaMs > child.options.timeout) {
-        return [success[2], child.options.timeout];
+        return {
+            'status': success[2],
+            'executionTime': child.options.timeout,
+            'test': 0
+        };
     }
-    return [success[output === expected ? 1 : 0], deltaMs];
+    return {
+        'status': success[output === expected ? 1 : 0],
+        'executionTime': deltaMs,
+        'test': test
+    };
 };
 
 
@@ -54,21 +68,25 @@ var evalProblem = function(submission, problem) {
     var data = submission.submission;
     // generate unique file
     var filename = 'test' + crypto.randomBytes(4).readUInt32LE(0);
-    fs.writeFileSync(filename, data);
+    var file = path.join(__dirname, 'data', filename);
 
-    var result = runTest(langInterpreters[language], filename, options,
+    fs.writeFileSync(file, data);
+
+    var result = runTest(langInterpreters[language], file, options,
             problem.examples[0].output);
     if (result[0] === 'Compilation error') {
         return result;
     }
+    var testIndex = 0;
     var results = problem.tests.map(function(test) {
         options.input = test.input;
-        return runTest(langInterpreters[language], filename, options,
-            test.output);
+        testIndex++;
+        return runTest(langInterpreters[language], file, options,
+            test.output, testIndex);
     });
 
     // remove file
-    fs.unlinkSync(filename);
+    fs.unlinkSync(file);
     return results;
 };
 
