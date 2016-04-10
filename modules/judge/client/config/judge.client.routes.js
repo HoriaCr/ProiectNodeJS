@@ -61,8 +61,13 @@
           pageTitle: 'Problem {{ problemResolve.title }}'
         }
       })
-      .state('submissions',{
+      .state('submissions', {
+        abstract: true,
         url: '/submissions',
+        template: '<ui-view/>'
+      })
+      .state('submissions.list',{
+        url: '',
         templateUrl: 'modules/judge/client/views/list-submissions.client.view.html',
         controller: 'JudgeSubmissionListController',
         controllerAs: 'vm',
@@ -70,27 +75,13 @@
           pageTitle: 'Submissions'
         }
     })
-    .state('problems.submissions.list', {
-      url: '/submissions/:problemId',
-      templateUrl: 'modules/judge/client/views/view-problem-submission-list.client.view.html',
-      controller: 'JudgeProblemSubmissionListController',
-      controllerAs: 'vm',
-      resolve: {
-        problemResolve: getProblem
-      },
-      data:{
-        pageTitle: 'Problem {{ problemResolve.title }}'
-      }
-    })
-    .state('problems.submission', {
+    .state('submissions.details', {
+      url: '/details/:submissionId',
       templateUrl: 'modules/judge/client/views/view-submission.client.view.html',
       controller: 'SubmissionController',
       controllerAs: 'vm',
       resolve: {
-        problemResolve: getProblem
-      },
-      data:{
-        pageTitle: 'Problem {{ problemResolve.title }}'
+        submissionResolve: getSubmission
       }
     });
   }
@@ -100,6 +91,14 @@
   function getProblem($stateParams, JudgeService) {
     return JudgeService.get({
       problemId: $stateParams.problemId
+    }).$promise;
+  }
+
+  getSubmission.$inject = ['$stateParams', 'SubmissionService'];
+
+  function getSubmission($stateParams, SubmissionService) {
+    return SubmissionService.get({
+      submissionId: $stateParams.submissionId
     }).$promise;
   }
 

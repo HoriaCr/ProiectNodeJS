@@ -13,7 +13,7 @@
             method: 'GET',
             url: '/api/submissions'
         }).then(function successCallback(res) {
-            vm.submission = res;
+            vm.submissions = res.data;
         }, function errorCallback(res) {
             vm.error = res.data.message;
         });

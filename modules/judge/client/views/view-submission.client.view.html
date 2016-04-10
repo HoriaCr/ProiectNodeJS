@@ -5,7 +5,7 @@
 
 
   <ul class="list-group">
-    <a  ui-sref="problems.view({ problemId: vm.submission.problemId })">Problem</a>
+    <a  ui-sref="problems.view({ problemId: vm.submission.problem })">Problem</a>
     <li ng-bind="vm.submission.submitted | date:'mediumDate'" class="list-group-item"> Submitted on: </li>
     <li ng-if="vm.submission.user" ng-bind="vm.submission.user.displayName" class="list-group-item">User:
       <span ng-if="!vm.submission.user">Deleted User</span>

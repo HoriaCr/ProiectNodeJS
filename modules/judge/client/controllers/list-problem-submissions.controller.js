@@ -11,9 +11,9 @@
         var vm = this;
         $http({
             method: 'GET',
-            url: '/api/problems/submissions/' + problem._id
+            url: '/api/submissions/' + problem._id
         }).then(function successCallback(res) {
-            vm.submission = res;
+            vm.submission = res.data;
         }, function errorCallback(res) {
             vm.error = res.data.message;
         });

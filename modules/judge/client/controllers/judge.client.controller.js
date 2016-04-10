@@ -127,7 +127,7 @@
 
             var req = {
                 method: 'POST',
-                url: '/api/problems/submissions/' + problem._id,
+                url: '/api/submissions/' + problem._id,
                 headers: {
                     'Content-Type': 'application/json'
                 },

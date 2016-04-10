@@ -17,7 +17,7 @@
 
     Menus.addMenuItem('topbar', {
       title: 'Submissions',
-      state: 'submissions'
+      state: 'submissions.list'
     });
 
 
