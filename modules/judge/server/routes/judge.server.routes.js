@@ -23,12 +23,12 @@ module.exports = function (app) {
         .delete(problems.delete);
 
     // Problem submission routes.
-    app.route('/api/problems/submissions/:problemId').all(problemsPolicy.isAllowed)
+    app.route('/api/submissions/:problemId').all(problemsPolicy.isAllowed)
         .get(problems.listProblemSubmissions)
         .post(problems.addSubmission);
 
 
-    app.route('/api/problems/submissions:problemId/:submissionId').all(problemsPolicy.isAllowed)
+    app.route('/api/submissions/details/:submissionId').all(problemsPolicy.isAllowed)
         .get(problems.readSubmission);
 
     // List all submissions

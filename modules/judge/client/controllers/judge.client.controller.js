@@ -139,7 +139,7 @@
             };
 
             $http(req).then(function successCallback(res) {
-
+                $state.go('submissions.list');
             }, function errorCallback(res) {
                 vm.error = res.data.message;
             });

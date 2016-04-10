@@ -103,10 +103,11 @@ var evaluateProblem = function(submission, problem) {
     } else {
         ret['results'] = res;
         var passed = res.reduce(function (total, result) {
-            return result[0] === 'Accepted' ? total + 1 : total;
-        });
-        if (passed === res.length) {
-            ret['evaluationStatus'] = 'Wrong answer';
+            return result.status === 'Accepted' ? total + 1 : total;
+        }, 0);
+
+        if (passed !== res.length) {
+            ret['evaluationStatus'] = 'Failed';
         } else {
             ret['evaluationStatus'] = 'Accepted';
         }
@@ -116,3 +117,4 @@ var evaluateProblem = function(submission, problem) {
 };
 
 exports.evaluateProblem = evaluateProblem;
+

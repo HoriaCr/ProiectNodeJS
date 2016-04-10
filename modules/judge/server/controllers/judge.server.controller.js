@@ -163,7 +163,7 @@ exports.addSubmission = function(req, res) {
 exports.readSubmission = function(req, res) {
     // convert mongoose document to JSON
     var submission = req.submission ? req.submission.toJSON() : {};
-    res.json(submission);
+    res.json(submission)
 };
 
 
@@ -178,7 +178,7 @@ exports.submissionByID = function (req, res, next, id) {
         });
     }
 
-    Problem.findById(id).populate('user').exec(function (err, submission) {
+    Submission.findById(id).populate('user').exec(function (err, submission) {
         if (err) {
             return next(err);
         } else if (!submission) {
@@ -192,7 +192,7 @@ exports.submissionByID = function (req, res, next, id) {
 };
 
 exports.allSubmissions = function(req, res) {
-    Submission.find().select('-submitted').populate('user problem').exec(
+    Submission.find().populate('user problem').exec(
         function(err, submissions) {
             if (err) {
                 return res.status(400).send({
