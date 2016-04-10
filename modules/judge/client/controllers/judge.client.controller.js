@@ -5,15 +5,25 @@
         .module('judge')
         .controller('JudgeController', JudgeController);
 
-    JudgeController.$inject = ['$scope', '$state', 'problemResolve', 'Authentication'];
+    JudgeController.$inject = ['$http', '$scope', '$state', 'problemResolve', 'Authentication', 'FileUploader'];
 
-    function JudgeController($scope, $state, problem, Authentication) {
+    function JudgeController($http, $scope, $state, problem, Authentication, FileUploader) {
         var vm = this;
 
+        vm.availableOptions = [{'id': 1, name: 'Python2.7'},
+            {'id': 2, name: 'Python3'},
+            {'id': 3, name: 'Ruby'},
+            {'id': 4, name: 'JavascriptV8'}
+        ];
+
+        vm.selectedOption = vm.availableOptions[0];
+        vm.uploader = new FileUploader();
+        vm.canSubmit = false;
         vm.problem = problem;
         if (!vm.problem.examples) {
             vm.problem.examples = [];
         }
+
         if (!vm.problem.tests) {
             vm.problem.tests = [];
         }
@@ -28,6 +38,24 @@
 
         vm.addTest = addTest;
         vm.removeTest = removeTest;
+
+        vm.submit = submit;
+
+        vm.uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+            console.info('onWhenAddingFileFailed', item, filter, options);
+        };
+
+        vm.uploader.onAfterAddingFile = function(fileItem) {
+            // TODO: Possible hack? There should be a better way to do it.
+            var reader = new FileReader();
+            reader.readAsText(fileItem._file);
+            reader.onload = function(e) {
+                vm.submissionData = e.target.result;
+                vm.canSubmit = true;
+            };
+        };
+
+
         // Remove existing Problem
         function remove() {
             if (confirm('Are you sure you want to delete?')) {
@@ -90,5 +118,34 @@
                 vm.problem.tests.pop();
             }
         }
+
+        // Submit a solution to a problem
+        function submit() {
+            if (!vm.submissionData || !vm.canSubmit) {
+                return false;
+            }
+
+            var req = {
+                method: 'POST',
+                url: '/api/problems/submissions/' + problem._id,
+                headers: {
+                    'Content-Type': 'json'
+                },
+                data: {
+                    submission: vm.submissionData,
+                    language: vm.selectedOption.name,
+                    user: vm.authentication.user
+                }
+            };
+
+            $http(req).then(function successCallback(res) {
+                $state.go('problems.submission.view', {
+                    problemId: res._id
+                });
+            }, function errorCallback(res) {
+                vm.error = res.data.message;
+            });
+        }
+
     }
 })();

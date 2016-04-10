@@ -196,7 +196,6 @@ exports.allSubmissions = function(req, res) {
                     problem.submissions = problem.submissions.map(function(s){
                         s._problemId = problem._id;
                         s.title = problem.title;
-                        console.log(s);
                         return s;
                     });
                     return problem;

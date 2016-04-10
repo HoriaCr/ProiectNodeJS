@@ -69,6 +69,29 @@
         data:{
           pageTitle: 'Submissions'
         }
+    })
+    .state('problems.submissions.list', {
+      url: '/submissions/:problemId',
+      templateUrl: 'modules/judge/client/views/view-problem-submission-list.client.view.html',
+      controller: 'JudgeProblemSubmissionListController',
+      controllerAs: 'vm',
+      resolve: {
+        problemResolve: getProblem
+      },
+      data:{
+        pageTitle: 'Problem {{ problemResolve.title }}'
+      }
+    })
+    .state('problems.submission.view', {
+      templateUrl: 'modules/judge/client/views/view-submission.client.view.html',
+      controller: 'SubmissionController',
+      controllerAs: 'vm',
+      resolve: {
+        problemResolve: getProblem
+      },
+      data:{
+        pageTitle: 'Problem {{ problemResolve.title }}'
+      }
     });
   }
 
