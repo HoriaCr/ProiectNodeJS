@@ -72,49 +72,14 @@ var evalProblem = function(submission, problem) {
     return results;
 };
 
-var runExample = function() {
-    var timeLimit = 100;
-    var data = 'a = [int(x) for x in input().split()]\n' +
-        'x = 0\n' +
-        'while 1:\n' +
-        '    x = x + 1';
 
-    var submission = {
-        'language': 'python3',
-        'submission': data
-    };
-
-    var problem = {
-        'timeLimit': 500,
-        'examples': [{
-            input: '1 2',
-            output: '3'
-        }],
-        'tests': [
-            {
-                input: '1 0',
-                output: '1'
-            },
-
-            {
-                input: '1 -1',
-                output: '0'
-            },
-            {
-                input: '1000 1200',
-                output: '2200'
-            }
-        ]
-    };
-    console.log(evalProblem(submission, problem));
-};
 
 var evaluateProblem = function(submission, problem) {
     var res = evalProblem(submission, problem);
     var ret = {};
     if (res[0] === 'Compilation error') {
         ret = {
-            'evaluationStatus': 'Compilation Error',
+            'evaluationStatus': 'Compilation Error' ,
             'results': []
         };
     } else {
@@ -131,3 +96,5 @@ var evaluateProblem = function(submission, problem) {
 
     return ret;
 };
+
+exports.evaluateProblem = evaluateProblem;

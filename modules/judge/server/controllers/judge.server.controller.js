@@ -130,14 +130,12 @@ exports.addSubmission = function(req, res) {
     var problem = req.problem;
     var user = req.user;
     var submission = new Submission(req.body);
-    var ans = problemEval.evaluateProblem(problem, submission);
-    if (ans[0] !== 'Compilation error') {
-        submission.results = ans[1];
-    } else {
-        submission.results = [];
-    }
-    submission.evaluationStatus = ans[0];
+    submission.submission = req.body.submission;
+    submission.language = req.body.language;
     submission.user = user;
+    var ans = problemEval.evaluateProblem(submission, problem);
+    submission.evaluationStatus = ans.evaluationStatus;
+    submission.results = ans.results;
     submission.save(function (err) {
         if (err) {
             return res.status(400).send({
@@ -146,8 +144,9 @@ exports.addSubmission = function(req, res) {
         } else {
             res.json(submission);
         }
+
     });
-    problem.submissions.append(submission);
+
 };
 
 exports.readSubmission = function(req, res) {

@@ -82,7 +82,7 @@
         pageTitle: 'Problem {{ problemResolve.title }}'
       }
     })
-    .state('problems.submission.view', {
+    .state('problems.submission', {
       templateUrl: 'modules/judge/client/views/view-submission.client.view.html',
       controller: 'SubmissionController',
       controllerAs: 'vm',

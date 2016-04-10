@@ -10,10 +10,10 @@
     function JudgeController($http, $scope, $state, problem, Authentication, FileUploader) {
         var vm = this;
 
-        vm.availableOptions = [{'id': 1, name: 'Python2.7'},
-            {'id': 2, name: 'Python3'},
-            {'id': 3, name: 'Ruby'},
-            {'id': 4, name: 'JavascriptV8'}
+        vm.availableOptions = [{'id': 1, name: 'python2.7'},
+            {'id': 2, name: 'python3'},
+            {'id': 3, name: 'ruby'},
+            {'id': 4, name: 'javascriptV8'}
         ];
 
         vm.selectedOption = vm.availableOptions[0];
@@ -129,7 +129,7 @@
                 method: 'POST',
                 url: '/api/problems/submissions/' + problem._id,
                 headers: {
-                    'Content-Type': 'json'
+                    'Content-Type': 'application/json'
                 },
                 data: {
                     submission: vm.submissionData,
@@ -139,9 +139,7 @@
             };
 
             $http(req).then(function successCallback(res) {
-                $state.go('problems.submission.view', {
-                    problemId: res._id
-                });
+
             }, function errorCallback(res) {
                 vm.error = res.data.message;
             });
